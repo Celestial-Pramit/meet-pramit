@@ -187,60 +187,7 @@ ul {
 
 /* ========== CUSTOM CURSOR ========== */
 
-.cursor-dot {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background: var(--accent-primary);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width 0.15s, height 0.15s, background 0.15s;
-  display: none;
-}
 
-.cursor-ring {
-  position: fixed;
-  width: 36px;
-  height: 36px;
-  border: 2px solid var(--accent-primary);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background 0.3s ease;
-  display: none;
-}
-
-.cursor-ring.active {
-  width: 24px;
-  height: 24px;
-  background: rgba(255, 111, 97, 0.08);
-  border-color: var(--accent-secondary);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .cursor-dot,
-  .cursor-ring {
-    display: block;
-  }
-
-  body,
-  body * {
-    cursor: none;
-  }
-
-  a,
-  button,
-  input,
-  textarea,
-  [role="button"] {
-    cursor: none;
-  }
-}
-
-/* ========== LIGHT THEME ========== */
 
 body.light {
   --bg-primary: #f5f3ff;
@@ -1814,4 +1761,197 @@ body.light .about-mini-card {
 .section-heading-anim {
   background-size: 200% 200%;
   animation: headingShimmer 4s ease infinite;
+}
+
+/* ========== FLOATING PIKACHU ========== */
+
+.pikachu {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 60px;
+  z-index: 9999;
+  cursor: grab;
+  transition: left 2.5s cubic-bezier(0.45, 0.05, 0.2, 0.99),
+              top 2.5s cubic-bezier(0.45, 0.05, 0.2, 0.99);
+  animation: pikachuFloat 3s ease-in-out infinite;
+}
+
+@keyframes pikachuFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.pikachu-body {
+  width: 42px;
+  height: 38px;
+  background: #F6D000;
+  border-radius: 50% 50% 45% 45%;
+  position: relative;
+  margin: 16px auto 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Ears */
+.pikachu-ear-l,
+.pikachu-ear-r {
+  position: absolute;
+  width: 12px;
+  height: 18px;
+  background: #F6D000;
+  border-radius: 50% 50% 0 0;
+  top: 0;
+  z-index: -1;
+}
+.pikachu-ear-l {
+  left: 3px;
+  transform: rotate(-20deg);
+}
+.pikachu-ear-r {
+  right: 3px;
+  transform: rotate(20deg);
+}
+.pikachu-ear-l::after,
+.pikachu-ear-r::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #333;
+  border-radius: 50%;
+}
+
+/* Eyes */
+.pikachu-eye-l,
+.pikachu-eye-r {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: #222;
+  border-radius: 50%;
+  top: 12px;
+}
+.pikachu-eye-l { left: 8px; }
+.pikachu-eye-r { right: 8px; }
+
+/* Cheeks */
+.pikachu-cheek-l,
+.pikachu-cheek-r {
+  position: absolute;
+  width: 7px;
+  height: 5px;
+  background: #E84242;
+  border-radius: 50%;
+  top: 18px;
+}
+.pikachu-cheek-l { left: 3px; }
+.pikachu-cheek-r { right: 3px; }
+
+/* Mouth */
+.pikachu-mouth {
+  position: absolute;
+  width: 5px;
+  height: 2.5px;
+  border-bottom: 1.5px solid #333;
+  border-radius: 0 0 50% 50%;
+  bottom: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ========== CIRCLE MENU ========== */
+
+.circle-menu {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-menu-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent-gradient);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(255, 111, 97, 0.3);
+  transition: transform 0.3s ease;
+}
+.circle-menu-btn:hover {
+  transform: scale(1.08);
+}
+.circle-menu-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.circle-menu-items {
+  position: absolute;
+  width: 0;
+  height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-menu-item {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-accent);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.3s ease,
+              background 0.3s;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+.circle-menu-item svg {
+  width: 20px;
+  height: 20px;
+}
+.circle-menu-item:hover {
+  background: var(--accent-primary);
+  color: #fff;
+  border-color: var(--accent-primary);
+}
+
+.circle-menu.open .circle-menu-item {
+  pointer-events: auto;
+}
+
+.circle-menu.open .circle-menu-item:nth-child(1) {
+  transform: translateY(-70px);
+  opacity: 1;
+}
+.circle-menu.open .circle-menu-item:nth-child(2) {
+  opacity: 1;
+}
+.circle-menu.open .circle-menu-item:nth-child(3) {
+  transform: translateY(70px);
+  opacity: 1;
 }
