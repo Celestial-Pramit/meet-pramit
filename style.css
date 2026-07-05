@@ -891,11 +891,11 @@ body.konami-active * {
   top: 0;
   left: 50%;
   width: 2px;
-  height: var(--line-height, 0px);
+  height: var(--line-height, 0%);
   background: var(--accent-gradient);
   transform: translateX(-50%);
   z-index: 1;
-  transition: height 0.4s ease;
+  transition: height 0.15s ease-out;
 }
 
 .timeline-item {

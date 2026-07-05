@@ -312,37 +312,39 @@ if (typeof pdfjsLib !== "undefined") {
   const timeline = document.querySelector(".timeline");
   if (!timeline) return;
   const items = timeline.querySelectorAll(".timeline-item");
-  const line = timeline.querySelector("::after");
-
-  function updateLine() {
-    const first = timeline.querySelector(".timeline-item.visible");
-    if (!first) { timeline.style.setProperty("--line-height", "0px"); return; }
-
-    const timelineTop = timeline.getBoundingClientRect().top;
-    let maxBottom = 0;
-    items.forEach(item => {
-      if (item.classList.contains("visible")) {
-        const rect = item.getBoundingClientRect();
-        const dotCenter = rect.top + 40 - timelineTop;
-        if (dotCenter > maxBottom) maxBottom = dotCenter;
-      }
-    });
-    timeline.style.setProperty("--line-height", maxBottom + "px");
-  }
 
   const fill = document.createElement("div");
   fill.className = "timeline-fill";
   timeline.appendChild(fill);
+
+  function updateLine() {
+    const rect = timeline.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const totalH = rect.bottom - rect.top;
+    const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + totalH)));
+    timeline.style.setProperty("--line-height", (progress * 100) + "%");
+  }
 
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add("visible");
         obs.unobserve(entry.target);
-        updateLine();
       }
     });
-  }, { threshold: 0.25, rootMargin: "0px 0px -50px 0px" });
+  }, { threshold: 0.2, rootMargin: "0px 0px -40px 0px" });
 
   items.forEach(item => obs.observe(item));
+
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateLine();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+  updateLine();
 })();
