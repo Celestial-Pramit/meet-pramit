@@ -441,7 +441,7 @@
             </div>
           </div>
         </div>
-        <form class="contact-form">
+        <form class="contact-form" id="contactForm">
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" placeholder="Your name" required />
@@ -454,9 +454,10 @@
             <label for="message">Message</label>
             <textarea id="message" rows="5" placeholder="Your message" required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-submit">
-            <i data-lucide="send"></i> Send Message
+          <button type="submit" class="btn btn-primary btn-submit" id="sendBtn">
+            <i data-lucide="send"></i> <span>Send Message</span>
           </button>
+          <p class="form-status" id="formStatus"></p>
         </form>
       </div>
     </div>

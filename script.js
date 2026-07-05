@@ -348,3 +348,59 @@ if (typeof pdfjsLib !== "undefined") {
   });
   updateLine();
 })();
+
+/* ── Send Message ── */
+(function() {
+  const form = document.getElementById('contactForm');
+  const btn = document.getElementById('sendBtn');
+  const status = document.getElementById('formStatus');
+  if (!form) return;
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !email || !message) {
+      status.textContent = 'Please fill in all fields.';
+      status.className = 'form-status error';
+      return;
+    }
+
+    btn.classList.add('loading');
+    btn.querySelector('span').textContent = 'Sending...';
+    status.textContent = '';
+    status.className = 'form-status';
+
+    const formData = new URLSearchParams();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('message', message);
+
+    try {
+      const res = await fetch('https://formspree.io/f/xnjkwlgk', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        status.textContent = 'Message sent successfully! I\'ll get back to you soon.';
+        status.className = 'form-status success';
+        form.reset();
+      } else {
+        status.textContent = 'Something went wrong. Please try again or email me directly.';
+        status.className = 'form-status error';
+      }
+    } catch {
+      window.location.href = `mailto:pramitdatta725@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0A%0AFrom: ${encodeURIComponent(email)}`;
+      status.textContent = 'Redirecting to your email client...';
+      status.className = 'form-status success';
+    }
+
+    btn.classList.remove('loading');
+    btn.querySelector('span').textContent = 'Send Message';
+  });
+})();

@@ -1540,6 +1540,22 @@ body.konami-active * {
   height: 18px;
 }
 
+.form-status {
+  font-size: 0.9rem;
+  text-align: center;
+  min-height: 1.5em;
+  transition: color 0.3s;
+}
+.form-status.success { color: #10b981; }
+.form-status.error { color: #ef4444; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.btn-submit.loading svg {
+  animation: spin 0.8s linear infinite;
+}
+
 /* Contact responsive */
 
 @media (max-width: 768px) {
