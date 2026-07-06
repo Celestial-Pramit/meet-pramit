@@ -115,13 +115,11 @@ initLucide();
 
 /* ========== THEME TOGGLE ========== */
 
-const themeToggle = document.getElementById("themeToggle");
-const themeIcon = themeToggle.querySelector("i[data-lucide]");
-
 function setTheme(theme) {
   document.body.classList.toggle("light", theme === "light");
-  themeIcon.setAttribute("data-lucide", theme === "light" ? "sun" : "moon");
   localStorage.setItem("theme", theme);
+  const themeItem = document.querySelector('.circle-menu-item[data-action="theme"] i');
+  if (themeItem) themeItem.setAttribute("data-lucide", theme === "light" ? "sun" : "moon");
   if (typeof lucide !== "undefined") lucide.createIcons();
 }
 
@@ -129,11 +127,6 @@ initLucide();
 
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "light") setTheme("light");
-
-themeToggle.addEventListener("click", () => {
-  const isLight = document.body.classList.contains("light");
-  setTheme(isLight ? "dark" : "light");
-});
 
 /* ========== KONAMI CODE ========== */
 
@@ -485,36 +478,33 @@ if (typeof pdfjsLib !== "undefined") {
 
       if (action === 'theme') {
         const isLight = document.body.classList.contains('light');
-        document.body.classList.toggle('light', !isLight);
-        localStorage.setItem('theme', isLight ? 'dark' : 'light');
-        const navIcon = document.querySelector('#themeToggle i');
-        if (navIcon) navIcon.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
-        item.innerHTML = isLight ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>';
+        setTheme(isLight ? 'dark' : 'light');
+        lucide.createIcons();
       }
 
       if (action === 'brightness') {
-        const overlay = document.getElementById('brightnessOverlay') || (function() {
-          const el = document.createElement('div');
-          el.id = 'brightnessOverlay';
-          el.style.cssText = 'position:fixed;inset:0;z-index:9997;pointer-events:none;transition:background 0.3s';
-          document.body.appendChild(el);
-          return el;
-        })();
-        let level = parseFloat(overlay.dataset.level || '0');
-        level = level >= 0.6 ? 0 : level + 0.3;
-        overlay.dataset.level = level;
-        overlay.style.background = `rgba(0,0,0,${level})`;
+        const isLight = document.body.classList.toggle('light');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        const themeItem = document.querySelector('.circle-menu-item[data-action="theme"] i');
+        if (themeItem) themeItem.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+        item.innerHTML = isLight ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
       }
 
       if (action === 'translate') {
-        const html = document.documentElement;
-        if (html.lang === 'bn') {
-          html.lang = 'en';
-          item.innerHTML = '<i data-lucide="languages"></i>';
-        } else {
-          html.lang = 'bn';
-          item.innerHTML = '<span style="font-size:0.75rem;">বাং</span>';
-        }
+        const about = document.getElementById('about');
+        if (!about) return;
+        const els = about.querySelectorAll('[data-bn]');
+        const isBn = about.classList.toggle('bn');
+        els.forEach(function(el) {
+          if (isBn) {
+            el.dataset.en = el.innerHTML;
+            el.innerHTML = el.dataset.bn;
+          } else {
+            el.innerHTML = el.dataset.en;
+          }
+        });
+        item.innerHTML = isBn ? '<span style="font-size:0.75rem;">বাং</span>' : '<i data-lucide="languages"></i>';
         if (typeof lucide !== 'undefined') lucide.createIcons();
       }
 
