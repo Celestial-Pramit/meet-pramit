@@ -198,26 +198,31 @@ if (typeof pdfjsLib !== "undefined") {
   const heroSubtitle = document.querySelector(".hero-subtitle");
   const titleHTML = heroTitle.innerHTML;
   const subtitleHTML = heroSubtitle.innerHTML;
-  const titleText = heroTitle.textContent;
-  const subtitleText = heroSubtitle.textContent;
+  const titleLines = heroTitle.innerText.split("\n");
+  const subtitleLines = heroSubtitle.innerText.split("\n");
   const chars = "!<>-_\\/[]{}—=+*^?#________";
   let busy = false;
 
-  function doScramble(el, text, cb) {
-    const len = text.length;
+  function doScramble(el, lines, cb) {
+    const totalChars = lines.reduce((s, l) => s + l.length, 0);
     el.textContent = "";
     const spans = [];
-    for (let i = 0; i < len; i++) {
-      const s = document.createElement("span");
-      s.className = "scramble-char";
-      s.textContent = chars[Math.floor(Math.random() * chars.length)];
-      el.appendChild(s);
-      spans.push(s);
-    }
+    let idx = 0;
+    lines.forEach((line, li) => {
+      if (li > 0) el.appendChild(document.createElement("br"));
+      for (let i = 0; i < line.length; i++) {
+        const s = document.createElement("span");
+        s.className = "scramble-char";
+        s.textContent = chars[Math.floor(Math.random() * chars.length)];
+        el.appendChild(s);
+        spans[idx++] = s;
+      }
+    });
+    const flatText = lines.join("");
     let pos = 0;
     function reveal() {
-      if (pos >= len) { if (cb) cb(); return; }
-      spans[pos].textContent = text[pos];
+      if (pos >= totalChars) { if (cb) cb(); return; }
+      spans[pos].textContent = flatText[pos];
       pos++;
       setTimeout(reveal, 50);
     }
@@ -248,12 +253,14 @@ if (typeof pdfjsLib !== "undefined") {
     heroSubtitle.style.height = heroSubtitle.offsetHeight + "px";
     heroTitle.classList.add("anim-scramble");
     heroSubtitle.classList.add("anim-scramble");
-    doScramble(heroTitle, titleText, () => {
+    doScramble(heroTitle, titleLines, () => {
       heroTitle.innerHTML = titleHTML;
+      heroTitle.classList.remove("anim-scramble");
       setTimeout(() => {
         heroSubtitle.classList.add("anim-scramble");
-        doScramble(heroSubtitle, subtitleText, () => {
+        doScramble(heroSubtitle, subtitleLines, () => {
           heroSubtitle.innerHTML = subtitleHTML;
+          heroSubtitle.classList.remove("anim-scramble");
           busy = false;
         });
       }, 400);
@@ -514,4 +521,52 @@ if (typeof pdfjsLib !== "undefined") {
       if (typeof lucide !== 'undefined') lucide.createIcons();
     });
   });
+})();
+
+/* ── Staggered Fade-Up Scroll Animation ── */
+(function() {
+  const groups = [
+    { parent: '.about-card-grid', clazz: 'blur-fade', stagger: 70 },
+    { parent: '.about .stats-grid', clazz: 'blur-fade', stagger: 70 },
+    { parent: '.about-image-col', clazz: 'fade-up', stagger: 0 },
+    { parent: '.skills-grid', clazz: 'blur-fade', stagger: 60 },
+    { parent: '.research-grid', clazz: 'blur-fade', stagger: 60 },
+    { parent: '.projects-grid', clazz: 'blur-fade', stagger: 80 },
+    { parent: '.resume-card', clazz: 'fade-up', stagger: 0 },
+    { parent: '.resume-preview', clazz: 'fade-up', stagger: 200 },
+    { parent: '.contact-info', clazz: 'fade-up', stagger: 0 },
+    { parent: '.contact-form', clazz: 'blur-fade', stagger: 70 },
+  ];
+
+  const entries = [];
+
+  groups.forEach(({ parent, clazz, stagger }) => {
+    const el = document.querySelector(parent);
+    if (!el) return;
+    if (stagger > 0) {
+      Array.from(el.children).forEach(c => c.classList.add(clazz));
+      entries.push({ el, clazz, stagger });
+    } else {
+      el.classList.add(clazz);
+      entries.push({ el, clazz, single: true });
+    }
+  });
+
+  const obs = new IntersectionObserver((ins) => {
+    ins.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      obs.unobserve(entry.target);
+      const found = entries.find(e => e.el === entry.target);
+      if (!found) return;
+      if (found.single) {
+        found.el.classList.add('visible');
+      } else {
+        Array.from(found.el.children).forEach((c, i) => {
+          setTimeout(() => c.classList.add('visible'), i * found.stagger);
+        });
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  entries.forEach(e => obs.observe(e.el));
 })();

@@ -557,6 +557,13 @@ body.konami-active * {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.about-image-frame:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: var(--accent-primary);
 }
 
 .about-image-frame img {
@@ -659,12 +666,12 @@ body.konami-active * {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
 
 .stat-icon {
@@ -761,13 +768,13 @@ body.konami-active * {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 24px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .skill-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  border-color: var(--border-accent);
+  transform: translateY(-10px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+  border-color: var(--accent-primary);
 }
 
 .skill-card-header {
@@ -972,8 +979,9 @@ body.light .skill-card-icon {
 .timeline-item.visible:nth-child(4) .timeline-content { transition-delay: 0.3s; }
 
 .timeline-content:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-8px) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
 }
 
 .timeline-meta {
@@ -1125,13 +1133,13 @@ body.light .skill-card-icon {
   border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-  border-color: var(--border-accent);
+  transform: translateY(-12px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  border-color: var(--accent-primary);
 }
 
 .project-image {
@@ -1766,6 +1774,10 @@ body.light .skill-card-icon {
 
 /* ========== HERO TEXT SCRAMBLE ========== */
 
+.anim-scramble {
+  overflow: hidden;
+}
+
 .anim-scramble .scramble-char {
   display: inline-block;
   font-variant-numeric: tabular-nums;
@@ -1784,12 +1796,13 @@ body.light .skill-card-icon {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 20px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: default;
 }
 .about-mini-card:hover {
-  border-color: var(--border-accent);
-  transform: translateY(-3px);
+  border-color: var(--accent-primary);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
 .about-mini-card .card-icon {
   width: 40px;
@@ -2023,4 +2036,98 @@ body.light .about-mini-card {
 .circle-menu.open .circle-menu-item:nth-child(3) {
   transform: translateY(70px);
   opacity: 1;
+}
+
+/* ========== SCROLL ANIMATIONS ========== */
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.clip-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.clip-reveal.visible {
+  clip-path: inset(0 0 0 0);
+}
+
+.blur-fade {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.blur-fade.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* ========== HOVER ENHANCEMENTS ========== */
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.skill-card:hover .skill-card-icon i,
+.skill-card:hover .skill-card-icon svg,
+.about-mini-card:hover .card-icon i,
+.about-mini-card:hover .card-icon svg,
+.stat-card:hover .stat-icon i,
+.stat-card:hover .stat-icon svg,
+.timeline-content:hover .timeline-icon i,
+.timeline-content:hover .timeline-icon svg,
+.contact-item:hover .contact-item-icon i,
+.contact-item:hover .contact-item-icon svg,
+.resume-card:hover .resume-icon i,
+.resume-card:hover .resume-icon svg {
+  animation: iconBounce 0.4s ease;
+}
+
+.form-group input:hover,
+.form-group textarea:hover {
+  border-color: var(--text-muted);
+  background: var(--bg-tertiary);
+}
+
+.contact-item:hover .contact-item-icon {
+  background: var(--accent-primary);
+  color: #fff;
+  transform: scale(1.05);
+}
+.contact-item:hover .contact-item-value {
+  color: var(--accent-primary);
+}
+
+.project-tags span:hover {
+  background: rgba(255, 111, 97, 0.15);
+  transform: translateY(-1px);
+}
+
+.timeline-tags span:hover {
+  border-color: var(--border-accent);
+  color: var(--accent-primary);
+}
+
+.nav-toggle:hover span {
+  background: var(--accent-primary);
+}
+
+.resume-card:hover {
+  border-color: var(--border-accent);
+  box-shadow: 0 4px 20px rgba(255, 111, 97, 0.1);
 }
